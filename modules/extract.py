@@ -1,7 +1,7 @@
 import requests
 import os
 import zipfile
-from typing import Optional 
+from typing import Optional, Union
 
 
 def download_zip_file(url:str, zip_path:str) -> Optional[Exception]:
@@ -74,3 +74,43 @@ def unzip_zip_file(zip_path:str, folder:str, file_path:str, file_repath:str) -> 
         print(f"extract.unzip_zip_file: pulando etapa, pois arquivo '{file_path}' já foi renomeado")
 
     return None
+
+
+def get_data(file_path:str, skip_first:bool=False) -> Union[Exception, list]:
+    """
+    Extrai dados em formato de matrix de arquivo csv em caminho 'file_path'.
+    Se 'skip_first' for 'True' então a primeira linha será ignorada (por ser a linha das colunas).
+    """
+
+    try:
+        file = open(file_path, "r")
+    except:
+        return Exception(f"extract.get_data: arquivo '{file_path}' falhou a abrir")
+
+    try:
+        fileread = file.read()
+    except:
+        file.close()
+        return Exception(f"extract.get_data: arquivo '{file_path}' falhou a ser lido")
+
+    file.close()
+
+    rows: list[list] = []
+
+    print("extract.get_data: extraindo ...")
+
+    for n, row in enumerate(fileread.split('\n')):
+        if skip_first and n == 0:
+            continue
+
+        columns = row.split(',')
+
+        if len(columns) != 13:
+            print(f"extract.get_data: linha '{n + 1}' mal-formada")
+            continue
+
+        rows.append(columns)
+
+    print("extract.get_data: extração completa!")
+    
+    return rows
