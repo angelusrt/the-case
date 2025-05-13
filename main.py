@@ -1,6 +1,6 @@
 import os
 import sqlite3
-from modules import extract, loading, transform
+from modules import extract, loading, transform, analysis
 
 url = "https://www.kaggle.com/api/v1/datasets/download/adilshamim8/social-media-addiction-vs-relationships"
 
@@ -58,15 +58,41 @@ if __name__ == "__main__":
         print(create_error)
         exit(5)
 
-    for n, row in enumerate(transformed_data):
-        load_error = loading.load_surveyee(connection, row)
+    row_count = analysis.get_row_count(connection)
 
-        if load_error is not None:
-            print(load_error)
-            exit(6)
-
+    if isinstance(row_count, Exception):
         connection.close()
+        print(row_count)
+        exit(6)
+
+    if row_count == 0:
+        for n, row in enumerate(transformed_data):
+            load_error = loading.load_surveyee(connection, row)
+
+            if load_error is not None:
+                print(load_error)
+                continue
+
+            connection.commit()
+    else:
+        print(f"main: pulando etapa - dados já carregados em banco de dados ('{row_count}' linhas)")
+
+    age_groups = analysis.group_addiction_by_age(connection)
+
+    if isinstance(age_groups, Exception):
+        connection.close()
+        print(age_groups)
         exit(7)
-    
-    connection.commit()
+
+    print(f"main::analysis.group_addiction_by_age: '{age_groups}'")
+
+    country_groups = analysis.group_addiction_by_country(connection)
+
+    if isinstance(country_groups, Exception):
+        connection.close()
+        print(country_groups)
+        exit(8)
+
+    print(f"main::analysis.group_addiction_by_country: '{country_groups}'")
+
     connection.close()
