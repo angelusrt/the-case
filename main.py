@@ -1,5 +1,5 @@
-import os
 import sqlite3
+import os
 from modules import extract, loading, transform, analysis
 
 url = "https://www.kaggle.com/api/v1/datasets/download/adilshamim8/social-media-addiction-vs-relationships"

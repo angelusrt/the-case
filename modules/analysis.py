@@ -1,5 +1,4 @@
 import sqlite3
-from matplotlib_terminal import plt as plotter
 from typing import Union
 
 def get_row_count(conn:sqlite3.Connection) -> Union[Exception, tuple]:
@@ -89,14 +88,3 @@ def group_addiction_by_country(conn:sqlite3.Connection) -> Union[Exception, list
 
     return res
 
-
-def display_addiction_by_age(data:list[tuple]):
-    """
-    Mostra gráfico no terminal.
-
-    #todo:fazer-funcionar
-    """
-
-    plotter.plot(data, lw=3)
-    plotter.title("Relação entre idade e vício com redes sociais")
-    plotter.show("block")
