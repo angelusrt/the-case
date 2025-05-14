@@ -6,7 +6,7 @@ Este projeto estuda a taxa de vício de uso de redes sociais a medida que demons
 
 Escolhi este tema por causa de sua relevância social na atualidade, sendo muito importante para gerar consciência sobre o problema com o intuito de embasar possíveis soluções miradas as faixas etárias.
 
-A fonte deste dado se encontra em 'https://www.kaggle.com/datasets/adilshamim8/social-media-addiction-vs-relationships', mais precisamente, você pode baixar o arquivo com o _link_ 'https://www.kaggle.com/api/v1/datasets/download/adilshamim8/social-media-addiction-vs-relationships'.
+A fonte deste dado se encontra em 'https://www.kaggle.com/datasets/adilshamim8/social-media-addiction-vs-relationships', mais precisamente, você pode baixar o arquivo com o _link_ 'https://www.kaggle.com/api/v1/datasets/download/adilshamim8/social-media-addiction-vs-relationships'. Há, também, um dado auxiliar relativo a IDH's que se encontra em 'https://raw.githubusercontent.com/openwashdata/worldhdi/main/inst/extdata/worldhdi.csv'.
 
 Esta fonte de dados inclui informações sobre:
 id do estudante; idade; genêro; nível acadêmico; país; uso médio diário em horas; plataforma mais usada; afeto em performance acadêmica; horas dormidas por noite; nota de saúde mental; status de relacionamento; conflitos sobre mídias sociais; e, nota de vício geral.
@@ -21,14 +21,15 @@ finalmente, o carregamento no banco de dados Sqlite.
 
 ## Consultas
 
-Apresentei cinco consultas:
+Apresentei seis consultas:
 o primeiro, agreguei por idade;
 o segundo, por país;
 o terceiro, por intervalo de idade 
 (estão presente duas faixas etárias);
 o quarto, por intervalo de uso médio 
 de redes sociais;
-e, o quinto, por tipo de relacionamento.
+o quinto, por tipo de relacionamento;
+e, o sexto, por IDH.
 
 Tive interesse nestas consultas, pois elas demonstram as 
 relações entre o vício em redes sociais e outros fatores como idade, 
@@ -45,9 +46,12 @@ fundo cada situação por região.
 A apresentação da relação entre vício e tempo de uso foi óbvia, 
 portanto resumo minhas palavras.
 
-Finalmente, a tabela de 'Vício por tipo de relacionamento' demonstrou que 
+A tabela de 'Vício por tipo de relacionamento' demonstrou que 
 a relação 'complexa' possui índices levemente maiores de pessoas vicíadas;
 seguido por 'solteiro'; e, finalmente, 'em relacionamento'.
+
+Finalmente, a sexta tabela sobre IDH, não demonstra correlação 
+nenhuma com vício em redes sociais.
 
 Todas estas tabelas ajudam a descrever melhor os dados de modo a 
 promover compreensão sobre a problemática - minha favorita foi a ultima.

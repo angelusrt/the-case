@@ -81,3 +81,29 @@ def prepare_load(data:list[list]) -> list[tuple]:
 
     return prepared_rows
     
+
+def join_country_addiction_and_hdi(data:list, hdis:list) -> list:
+    """
+    Une dados de países sobre vício e IDH. 
+    """
+
+    new_data:list = []
+
+    for row in data:
+        human_index:float = 0
+
+        for hdi in hdis:
+            if hdi[0] == row[0]:
+                try:
+                    human_index = float(hdi[1])
+                except:
+                    human_index = 0 
+
+                break
+
+        new_data.append([row[0], human_index, row[1]])
+
+    new_data.sort(key=lambda e: e[1])
+
+    return new_data
+

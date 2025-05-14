@@ -313,3 +313,30 @@ def show_addiction_by_relationship_status(data:list):
     print("(levemente maior) entre relacionamentos ")
     print("'complexos' e vício em redes sociais.")
     print()
+
+
+def show_addiction_by_hdi(data:list):
+    """
+    Apresenta os dados de 'group_addiction_by_country' e 'hdis'
+    no terminal, incluindo descrição.
+    """
+
+    print("Tabela 1.5: Vício por des. humano")
+    print("==")
+    print(f"{'País,':<18}{'IDH,':<18}{'Vício'}")
+
+    for row in data:
+        if len(row) < 2: continue
+
+        country = str(row[0]) + ","
+        hdi = '-.--,' if row[1] == 0 else f"{row[1]:.2f},"
+        addiction = row[2]
+
+        print(f"{country:<18}{hdi:<18}{addiction:.2f}")
+
+    print("==")
+    print("Esta tabela demonstra que IDH ")
+    print("não é um previsor de vício")
+    print()
+
+

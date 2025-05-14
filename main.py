@@ -7,6 +7,9 @@ url = "https://www.kaggle.com/api/v1/datasets/download/adilshamim8/social-media-
 data_path = "data"
 database_path = "database"
 
+hdi_name = "human-development-index.csv"
+hdi_path = os.path.join(data_path, hdi_name)
+
 zip_name = "social-media-addiction.zip"
 zip_path = os.path.join(data_path, zip_name)
 
@@ -45,13 +48,25 @@ if __name__ == "__main__":
     
     assert isinstance(data, list)
 
+    download_error = extract.download_hdi(hdi_path)
+
+    if download_error is not None:
+        print(download_error)
+        exit(4)
+
+    hdis = extract.get_hdi(hdi_path, True)
+
+    if isinstance(hdis, Exception):
+        print(hdis)
+        exit(5)
+
     transformed_data = transform.prepare_load(data)
 
     connection = loading.init_database(database_path)
 
     if isinstance(connection, Exception):
         print(connection)
-        exit(4)
+        exit(6)
 
     assert isinstance(connection, sqlite3.Connection)
 
@@ -60,14 +75,14 @@ if __name__ == "__main__":
     if create_error is not None:
         connection.close()
         print(create_error)
-        exit(5)
+        exit(7)
 
     row_count = analysis.get_row_count(connection)
 
     if isinstance(row_count, Exception):
         connection.close()
         print(row_count)
-        exit(6)
+        exit(8)
 
     if row_count == 0:
         for n, row in enumerate(transformed_data):
@@ -91,7 +106,7 @@ if __name__ == "__main__":
     if isinstance(age_groups, Exception):
         connection.close()
         print(age_groups)
-        exit(7)
+        exit(9)
 
     analysis.show_addiction_by_age(age_groups)
 
@@ -100,7 +115,7 @@ if __name__ == "__main__":
     if isinstance(country_groups, Exception):
         connection.close()
         print(country_groups)
-        exit(8)
+        exit(10)
 
     analysis.show_addiction_by_country(country_groups)
 
@@ -109,7 +124,7 @@ if __name__ == "__main__":
     if isinstance(age_range_groups, Exception):
         connection.close()
         print(age_range_groups)
-        exit(9)
+        exit(11)
 
     analysis.show_addiction_by_age_range(age_range_groups)
 
@@ -118,7 +133,7 @@ if __name__ == "__main__":
     if isinstance(usage_range_groups, Exception):
         connection.close()
         print(usage_range_groups)
-        exit(10)
+        exit(12)
 
     analysis.show_addiction_by_social_media_usage(usage_range_groups)
 
@@ -127,8 +142,12 @@ if __name__ == "__main__":
     if isinstance(status_range_groups, Exception):
         connection.close()
         print(status_range_groups)
-        exit(10)
+        exit(13)
 
     analysis.show_addiction_by_relationship_status(status_range_groups)
+
+    hdi_groups = transform.join_country_addiction_and_hdi(country_groups, hdis)
+
+    analysis.show_addiction_by_hdi(hdi_groups)
 
     connection.close()

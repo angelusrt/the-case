@@ -114,3 +114,84 @@ def get_data(file_path:str, skip_first:bool=False) -> Union[Exception, list]:
     print("extract.get_data: extração completa!")
     
     return rows
+
+
+def download_hdi(hdi_path:str) -> Optional[Exception]:
+    """
+    Baixa informações de índice de desenvolvimento humano 
+    dos vários países e põe em arquivo 'hdi_path'.
+    """
+
+    url = "https://raw.githubusercontent.com/openwashdata/worldhdi/main/inst/extdata/worldhdi.csv"
+
+    if not os.path.exists(hdi_path):
+        try:
+            res = requests.get(url)
+        except Exception as e:
+            return Exception(f"extract.download_hdi: erro '{e}'") 
+
+        if res.status_code != 200:
+            return Exception(f"extract.download_hdi: requisição falhou com status '{res.status_code}'")
+
+        if len(res.text) == 0:
+            return Exception(f"extract.download_hdi: resposta veio vázia")
+        
+        try:
+            zip_file = open(hdi_path, "w+")
+        except:
+            return Exception(f"extract.download_hdi: arquivo '{hdi_path}' não abriu")
+        
+        try:
+            zip_file.write(res.text)
+        except:
+            zip_file.close()
+            return Exception(f"extract.download_hdi: arquivo '{hdi_path}' não escreveu")
+        
+        zip_file.close()
+
+        print(f"extract.download_hdi: arquivo '{hdi_path}' criado com sucesso!")
+    else:
+        print(f"extract.download_hdi: pulando etapa, pois arquivo '{hdi_path}' já existe")
+
+    return None
+
+
+def get_hdi(file_path:str, skip_first:bool=False) -> Union[Exception, list]:
+    """
+    Extrai dados de 'indice de desenvolvimento humano' em formato de matrix de arquivo csv 
+    em caminho 'file_path'. Se 'skip_first' for 'True' então a primeira linha será ignorada 
+    (por ser a linha das colunas).
+    """
+
+    try:
+        file = open(file_path, "r")
+    except:
+        return Exception(f"extract.get_hdi: arquivo '{file_path}' falhou a abrir")
+
+    try:
+        fileread = file.read()
+    except:
+        file.close()
+        return Exception(f"extract.get_hdi: arquivo '{file_path}' falhou a ser lido")
+
+    file.close()
+
+    rows: list[list] = []
+
+    print("extract.get_hdi: extraindo ...")
+
+    for n, row in enumerate(fileread.split('\n')):
+        if skip_first and n == 0:
+            continue
+
+        columns = row.split(',')
+
+        if len(columns) != 17:
+            print(f"extract.get_hdi: linha '{n + 1}' mal-formada")
+            continue
+
+        rows.append([columns[1], columns[9]])
+
+    print("extract.get_hdi: extração completa!")
+    
+    return rows
