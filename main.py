@@ -18,6 +18,10 @@ file_repath = os.path.join(data_path, file_rename)
 
 
 if __name__ == "__main__":
+    print("processo")
+    print("========")
+    print()
+
     os.makedirs(data_path, exist_ok=True)
     os.makedirs(database_path, exist_ok=True)
 
@@ -77,6 +81,11 @@ if __name__ == "__main__":
     else:
         print(f"main: pulando etapa - dados já carregados em banco de dados ('{row_count}' linhas)")
 
+    print()
+    print("análise")
+    print("=======")
+    print()
+
     age_groups = analysis.group_addiction_by_age(connection)
 
     if isinstance(age_groups, Exception):
@@ -84,7 +93,7 @@ if __name__ == "__main__":
         print(age_groups)
         exit(7)
 
-    print(f"main::analysis.group_addiction_by_age: '{age_groups}'")
+    analysis.show_addiction_by_age(age_groups)
 
     country_groups = analysis.group_addiction_by_country(connection)
 
@@ -93,6 +102,33 @@ if __name__ == "__main__":
         print(country_groups)
         exit(8)
 
-    print(f"main::analysis.group_addiction_by_country: '{country_groups}'")
+    analysis.show_addiction_by_country(country_groups)
+
+    age_range_groups = analysis.group_addiction_by_age_range(connection)
+
+    if isinstance(age_range_groups, Exception):
+        connection.close()
+        print(age_range_groups)
+        exit(9)
+
+    analysis.show_addiction_by_age_range(age_range_groups)
+
+    usage_range_groups = analysis.group_addiction_by_social_media_usage(connection)
+
+    if isinstance(usage_range_groups, Exception):
+        connection.close()
+        print(usage_range_groups)
+        exit(10)
+
+    analysis.show_addiction_by_social_media_usage(usage_range_groups)
+
+    status_range_groups = analysis.group_addiction_by_relationship_status(connection)
+
+    if isinstance(status_range_groups, Exception):
+        connection.close()
+        print(status_range_groups)
+        exit(10)
+
+    analysis.show_addiction_by_relationship_status(status_range_groups)
 
     connection.close()
